@@ -49,4 +49,4 @@ pushes the branch
 switches between main and branches
 
 ## git merge branchname
-while in the main branch, this merges the given branch with the main
+while in the main branch, this merges the given branch with the main. To Leave the menu, press ctrl+x and then shift+n.
