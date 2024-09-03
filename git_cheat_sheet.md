@@ -11,3 +11,9 @@ makes a snapshot and transfers the changes to the local repository
 transfers the changes to the remote repository
 ## git mv
 moves or renames a file in the git enviroment
+## git log
+shows the history of commits. Exit by pressing "q"
+## git diff unique_hash -- filename
+shows the changes in a file of a specific commit
+## git checkout unique_hash -- filename
+restores an older version of a file of a specific commit
