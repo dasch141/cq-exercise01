@@ -9,3 +9,5 @@ shows if files are not commited yet
 makes a snapshot and transfers the changes to the local repository
 ## git push
 transfers the changes to the remote repository
+## git mv
+moves or renames a file in the git enviroment
