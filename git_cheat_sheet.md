@@ -29,3 +29,9 @@ restores an older version of a file of a specific commit
 
 ## pandoc -o filename.pdf filename.md
 creates an pdf out of the markdown file
+
+## git rm filename
+removes a file and directly adds the changes
+
+## .gitignore
+create .gitignore file to exclude files to be shown in git status
