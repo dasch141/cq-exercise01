@@ -17,3 +17,5 @@ shows the history of commits. Exit by pressing "q"
 shows the changes in a file of a specific commit
 ## git checkout unique_hash -- filename
 restores an older version of a file of a specific commit
+## pandoc -o filename.pdf filename.md
+creates an pdf out of the markdown file
