@@ -35,3 +35,18 @@ removes a file and directly adds the changes
 
 ## .gitignore
 create .gitignore file to exclude files to be shown in git status
+
+## git checkout -b branchname
+creates a new branch
+
+## git commit -m "message"
+commits the branch
+
+## git push -u origin branchname
+pushes the branch
+
+## git checkout main OR branchname
+switches between main and branches
+
+## git merge branchname
+while in the main branch, this merges the given branch with the main
