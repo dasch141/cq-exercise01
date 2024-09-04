@@ -12,3 +12,4 @@ process downloadFile {
 workflow {
     downloadFile()
 }
+test test
