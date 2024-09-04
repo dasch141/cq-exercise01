@@ -1,3 +1,5 @@
 .*
 *.pdf
 !.gitignore
+**/*.fasta
+**/*work
