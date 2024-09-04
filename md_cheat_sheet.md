@@ -1,6 +1,7 @@
 # Markdown Cheat Sheet
 
 ## Header
+Use --- before and after the header lines
 ---
 geometry: margin=25mm
 colorlinks: true
