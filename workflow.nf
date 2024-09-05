@@ -47,6 +47,17 @@ process splitSequencesPython {
   """
 }
 
+process countBases {
+  publishDir params.out, mode: "copy", overwrite: true
+  input:
+    path infile 
+  output:
+    path "${infile.getSimpleName()}.basecount"
+  """
+  grep -v ">" $infile | wc -m > ${infile.getSimpleName()}.basecount
+  """
+}
+
 workflow {
-    downloadFile | splitSequences
+  downloadFile | splitSequences | flatten | countBases 
 }
