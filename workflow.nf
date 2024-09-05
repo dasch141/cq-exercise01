@@ -24,7 +24,29 @@ process countSequences {
     """
 }
 
+process splitSequences {
+    publishDir params.out, mode:"copy", overwrite: true
+    input:
+        path infile
+    output:
+        path "*"
+
+    """
+    split -l 2 -d --additional-suffix=.fasta $infile part_
+    """
+}
+
+process splitSequencesPython {
+  publishDir params.out, mode: "copy", overwrite: true
+  input:
+    path infile 
+  output:
+    path "seq_*.fasta"
+  """
+  python $projectDir/split.py $infile seq_
+  """
+}
 
 workflow {
-    downloadFile | countSequences
+    downloadFile | splitSequences
 }
