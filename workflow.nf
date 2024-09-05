@@ -9,6 +9,17 @@ process downloadFile {
     """
 }
 
+process countSequences {
+        publishDir "/home/schlueddi/Module5/test/cq-exercise01", mode :"copy", overwrite: true
+    output:
+        path "numseqs.txt"
+    """
+    grep ">" batch1.fasta | wc -l > numseqs.txt
+    """
+}
+
+
 workflow {
     downloadFile()
+    countSequences()
 }
