@@ -24,6 +24,5 @@ process countSequences {
 
 
 workflow {
-    fastachannel = downloadFile()
-    countSequences(fastachannel)
+    downloadFile | countSequences
 }
