@@ -1,7 +1,9 @@
 nextflow.enable.dsl=2
 
+params.out = "$launchDir/output"
+
 process downloadFile {
-    publishDir "/home/schlueddi/Module5/test/cq-exercise01", mode :"copy", overwrite: true
+    publishDir params.out, mode :"copy", overwrite: true
     output:
         path "batch1.fasta"
 
@@ -11,7 +13,7 @@ process downloadFile {
 }
 
 process countSequences {
-    publishDir "/home/schlueddi/Module5/test/cq-exercise01", mode :"copy", overwrite: true
+    publishDir params.out, mode :"copy", overwrite: true
     input:
         path infile
     output:
