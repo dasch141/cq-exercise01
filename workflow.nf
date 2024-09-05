@@ -52,12 +52,27 @@ process countBases {
   input:
     path infile 
   output:
-    path "${infile.getSimpleName()}.basecount"
+    path "${infile.getSimpleName()}_basecount.txt"
   """
-  grep -v ">" $infile | wc -m > ${infile.getSimpleName()}.basecount
+  grep -v ">" $infile | wc -m > ${infile.getSimpleName()}_basecount.txt
   """
 }
+// workflow: downloadFile | splitSequences | flatten | countBases
+
+process countRepeats {
+    publishDir params.out, mode: "copy", overwrite: true
+    input:
+        path infile 
+    output:
+        path "${infile.getSimpleName()}_repeatcount.txt"
+
+    """
+    grep -o "GCCGCG" $infile | wc -l > ${infile.getSimpleName()}_repeatcount.txt
+    """
+
+}
+// workflow: downloadFile | splitSequences | flatten | countRepeats
 
 workflow {
-  downloadFile | splitSequences | flatten | countBases 
+  downloadFile | splitSequences | flatten | countRepeats 
 }
