@@ -2,4 +2,5 @@
 *.pdf
 !.gitignore
 **/*.fasta
-**/*work
+**/work/
+.nextflow.log*
