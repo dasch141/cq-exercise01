@@ -4,3 +4,5 @@
 **/*.fasta
 **/work/
 .nextflow.log*
+*:Zone.Identifier
+*:shield
