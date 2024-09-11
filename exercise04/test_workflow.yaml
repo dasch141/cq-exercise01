@@ -1,0 +1,11 @@
+- name: Run with SRR12022081
+  command: nextflow run ex04_workflow.nf -profile singularity
+  files:
+    - path: "results/SRR12022081_1.fastq"
+      should_exist: true
+    - path: "results/SRR12022081_2.fastq"
+      should_exist: true
+    - path: "results/SRR12022081_1.txt"
+      should_exist: true
+    - path: "results/SRR12022081_2.txt"
+      should_exist: true
