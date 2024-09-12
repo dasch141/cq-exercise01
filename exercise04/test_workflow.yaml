@@ -1,3 +1,10 @@
+- name: Testing No SRR provided
+  command: nextflow run ex04_workflow.nf -profile singularity
+  stdout:
+    contains_regex:
+      - 'Error'
+      - 'SRR'
+      
 - name: Run with SRR12022081
   command: nextflow run ex04_workflow.nf --srr SRR12022081 -profile singularity
   files:
@@ -7,23 +14,38 @@
       should_exist: true
     - path: "results/SRR12022081_1.txt"
       should_exist: true
-    - path: "results/SRR12022081_2.txt"
-      should_exist: true
-    - path: "results/SRR12022081_1.txt"
       contains:
         - "count"
         - "mean"
         - "max"
-    - path: "results/SRR12022081_2.txt"
       must_not_contain:
-        - "@SRR*"
+        - "@SRR"
+    - path: "results/SRR12022081_2.txt"
+      should_exist: true
+      contains:
+        - "count"
+        - "mean"
+        - "max"
+      must_not_contain:
+        - "@SRR"
   stdout:
     must_not_contain_regex:
       - 'Error'
 
-- name: Testing No SRR provided
-  command: nextflow run ex04_workflow.nf -profile singularity
+
+- name: Run with SRR16641628
+  command: nextflow run ex04_workflow.nf --srr SRR16641628 -profile singularity
+  files:
+    - path: "results/SRR16641628.txt"
+      should_exist: true
+      contains:
+        - "count"
+        - "mean"
+        - "max"
+      must_not_contain:
+        - "@SRR"
+    - path: "results/SRR16641628.fastq"
+      should_exist: true
   stdout:
-    contains_regex:
+    must_not_contain_regex:
       - 'Error'
-      - 'SRR'
