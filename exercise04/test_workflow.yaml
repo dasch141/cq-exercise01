@@ -9,3 +9,20 @@
       should_exist: true
     - path: "results/SRR12022081_2.txt"
       should_exist: true
+    - path: "results/SRR12022081_1.txt"
+      contains:
+        - "count"
+        - "mean"
+        - "max"
+    - path: "results/SRR12022081_2.txt"
+      must_not_contain:
+        - "@SRR*"
+
+- name: Testing Standard Output
+  command: echo Hello world
+  stdout:
+    contains_regex:
+      - 'Hello'
+      - 'world'
+    must_not_contain_regex:
+      - '^mean*'
