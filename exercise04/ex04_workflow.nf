@@ -4,6 +4,8 @@ params.storeDir = "${launchDir}/cache"
 params.out = "${launchDir}/results"
 //params.srr = "SRR12022081"
 params.srr = null
+params.with_stats = false
+params.with_fastqc = false
 
 process prefetch {
   storeDir params.storeDir
@@ -32,7 +34,7 @@ process splitTOfastq {
 }
 
 process statsFastq {
-    publishDir params.out, mode :"copy", overwrite: true
+    publishDir params.out, mode: "copy", overwrite: true
     container "https://depot.galaxyproject.org/singularity/ngsutils%3A0.5.9--py27h9801fc8_5"
     input:
         path infile
@@ -44,6 +46,19 @@ process statsFastq {
     """
 }
 
+process quality_ctrl {
+  publishDir params.out, mode: "copy", overwrite: true
+  container "https://depot.galaxyproject.org/singularity/fastqc%3A0.11.7--pl5.22.0_2"
+  input:
+    path infile
+  output:
+    path "${infile.baseName}_fastqc.html"
+  """
+  fastqc ${infile}
+  """
+}
+
+
 workflow {
   if(params.srr != null) {
     sra_file = prefetch(Channel.from(params.srr))
@@ -51,7 +66,13 @@ workflow {
       print "Error: Please provide SRR: --srr SRR_number"
       System.exit(0)
   }
-  splitTOfastq(sra_file) | flatten | statsFastq
+  fastqfile_channel = splitTOfastq(sra_file) | flatten
+  if(params.with_stats == true) {
+    statsFastq(fastqfile_channel)
+  }
+  if(params.with_fastqc == true) {
+    quality_ctrl(fastqfile_channel)
+  }
 }
 
 //   prefetch(Channel.from(params.srr)) | splitTOfastq | flatten | statsFastq
