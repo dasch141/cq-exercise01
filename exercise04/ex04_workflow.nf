@@ -48,7 +48,7 @@ workflow {
   if(params.srr != null) {
     sra_file = prefetch(Channel.from(params.srr))
   } else {
-      print "Error: Please provide SRR"
+      print "Error: Please provide SRR: --srr SRR_number"
       System.exit(0)
   }
   splitTOfastq(sra_file) | flatten | statsFastq
