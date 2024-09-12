@@ -10,8 +10,12 @@
   files:
     - path: "results/SRR12022081_1.fastq"
       should_exist: true
+      contains:
+        - "@SRR"
     - path: "results/SRR12022081_2.fastq"
       should_exist: true
+      contains:
+        - "@SRR"
     - path: "results/SRR12022081_1.txt"
       should_exist: true
       contains:
@@ -46,6 +50,8 @@
         - "@SRR"
     - path: "results/SRR16641628.fastq"
       should_exist: true
+      contains:
+        - "@SRR"
   stdout:
     must_not_contain_regex:
       - 'Error'
