@@ -1,19 +1,20 @@
 nextflow.enable.dsl = 2
 
-params.storeDir="${launchDir}/cache"
-params.out="${launchDir}/results"
-params.accession="SRR12022081"
+params.storeDir = "${launchDir}/cache"
+params.out = "${launchDir}/results"
+//params.srr = "SRR12022081"
+params.srr = null
 
 process prefetch {
   storeDir params.storeDir
   container "https://depot.galaxyproject.org/singularity/sra-tools%3A2.11.0--pl5321ha49a11a_3"
   input:
-    val accession
+    val params.srr
   output:
-    path "${accession}*"
+    path "${params.srr}*"
   script:
   """
-  prefetch $accession
+  prefetch $params.srr
   """
 }
 
@@ -44,5 +45,13 @@ process statsFastq {
 }
 
 workflow {
-  prefetch(Channel.from(params.accession)) | splitTOfastq | flatten | statsFastq
+  if(params.srr != null) {
+    sra_file = prefetch(Channel.from(params.srr))
+  } else {
+      print "Error: Please provide SRR"
+      System.exit(0)
+  }
+  splitTOfastq(sra_file) | flatten | statsFastq
 }
+
+//   prefetch(Channel.from(params.srr)) | splitTOfastq | flatten | statsFastq

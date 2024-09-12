@@ -1,5 +1,5 @@
 - name: Run with SRR12022081
-  command: nextflow run ex04_workflow.nf -profile singularity
+  command: nextflow run ex04_workflow.nf --srr SRR12022081 -profile singularity
   files:
     - path: "results/SRR12022081_1.fastq"
       should_exist: true
@@ -17,12 +17,13 @@
     - path: "results/SRR12022081_2.txt"
       must_not_contain:
         - "@SRR*"
+  stdout:
+    must_not_contain_regex:
+      - '^done*'
 
-- name: Testing Standard Output
-  command: echo Hello world
+- name: Testing No SRR provided
+  command: nextflow run ex04_workflow.nf -profile singularity
   stdout:
     contains_regex:
-      - 'Hello'
-      - 'world'
-    must_not_contain_regex:
-      - '^mean*'
+      - 'Error'
+      - 'SRR'
