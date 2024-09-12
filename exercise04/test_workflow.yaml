@@ -19,7 +19,7 @@
         - "@SRR*"
   stdout:
     must_not_contain_regex:
-      - '^done*'
+      - 'Error'
 
 - name: Testing No SRR provided
   command: nextflow run ex04_workflow.nf -profile singularity
