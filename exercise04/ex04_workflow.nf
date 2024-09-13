@@ -52,7 +52,7 @@ process quality_ctrl {
   input:
     path infile
   output:
-    path "${infile.baseName}_fastqc.html"
+    path "${infile.baseName}_fastqc.*"
   """
   fastqc ${infile}
   """
@@ -67,13 +67,17 @@ workflow {
       System.exit(0)
   }
   fastqfile_channel = splitTOfastq(sra_file) | flatten
-  if(params.with_stats == true) {
+  if(params.with_stats) {
     statsFastq(fastqfile_channel)
   }
-  if(params.with_fastqc == true) {
+  if(params.with_fastqc) {
     quality_ctrl(fastqfile_channel)
   }
 }
+
+// Run command:
+// nextflow run ex04_workflow.nf -profile singularity --srr SRR12022081 --with_stats --with_fastqc
+
 
 // Alternative:
 // add when to the processes and let statsFastq and qualtity_ctrl run simultaniously on same input
