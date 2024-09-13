@@ -6,6 +6,7 @@ params.out = "${launchDir}/results"
 params.srr = null
 params.with_stats = false
 params.with_fastqc = false
+params.with_fastp = false
 
 process prefetch {
   storeDir params.storeDir
@@ -56,8 +57,23 @@ process quality_ctrl {
   """
   fastqc ${infile}
   """
+// returns _fastqc.html and _fastqc.zip
 }
 
+process trimming{
+  publishDir params.out, mode: "copy", overwrite: true
+  container "https://depot.galaxyproject.org/singularity/fastp%3A0.23.4--hadf994f_3"
+  input:
+    path infile
+  output:
+    path "${infile.baseName}_fastp.fastq"
+  script:
+  """
+  fastp -i ${infile} -o ${infile.baseName}_fastp.fastq -j ${infile.baseName}_fastp.json -h ${infile.baseName}_fastp.html
+  """
+// returns fastp.html and fastp.json
+// fastp [options] -i <input_file> -o <output_filename.fasp.fastq>
+}
 
 workflow {
   if(params.srr != null) {
@@ -70,13 +86,22 @@ workflow {
   if(params.with_stats) {
     statsFastq(fastqfile_channel)
   }
+  if(params.with_fastqc && params.with_fastp) {    
+    trim_channel = trimming(fastqfile_channel)
+    con_channel = fastqfile_channel.concat(trim_channel)
+    quality_ctrl(con_channel.flatten())
+  } else {
   if(params.with_fastqc) {
     quality_ctrl(fastqfile_channel)
+  }
+  if(params.with_fastp) {
+    trimming(fastqfile_channel)
+  }
   }
 }
 
 // Run command:
-// nextflow run ex04_workflow.nf -profile singularity --srr SRR12022081 --with_stats --with_fastqc
+// nextflow run ex04_workflow.nf -profile singularity --srr SRR12022081 --with_stats --with_fastqc --with_fastp
 
 
 // Alternative:
