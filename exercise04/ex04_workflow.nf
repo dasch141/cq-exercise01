@@ -60,19 +60,32 @@ process quality_ctrl {
 // returns _fastqc.html and _fastqc.zip
 }
 
-process trimming{
+process trimming {
   publishDir params.out, mode: "copy", overwrite: true
   container "https://depot.galaxyproject.org/singularity/fastp%3A0.23.4--hadf994f_3"
   input:
     path infile
   output:
-    path "${infile.baseName}_fastp.fastq"
+    path "${infile.baseName}_fastp.*"
   script:
   """
   fastp -i ${infile} -o ${infile.baseName}_fastp.fastq -j ${infile.baseName}_fastp.json -h ${infile.baseName}_fastp.html
   """
 // returns fastp.html and fastp.json
 // fastp [options] -i <input_file> -o <output_filename.fasp.fastq>
+}
+
+process print_outs {
+  publishDir params.out, mode: "copy", overwrite: true
+  container "https://depot.galaxyproject.org/singularity/multiqc%3A1.9--py_1"
+  input:
+    path infile
+  output:
+    path "xxx"
+  script:
+  """
+
+  """
 }
 
 workflow {
@@ -88,8 +101,9 @@ workflow {
   }
   if(params.with_fastqc && params.with_fastp) {    
     trim_channel = trimming(fastqfile_channel)
-    con_channel = fastqfile_channel.concat(trim_channel)
-    quality_ctrl(con_channel.flatten())
+    con_channel = fastqfile_channel.concat(trim_channel).flatten()
+    fastq_only_channel = con_channel.filter { file -> file.toString().endsWith('.fastq') }
+    quality_ctrl(fastq_only_channel.flatten())
   } else {
   if(params.with_fastqc) {
     quality_ctrl(fastqfile_channel)
