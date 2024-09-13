@@ -75,4 +75,10 @@ workflow {
   }
 }
 
-//   prefetch(Channel.from(params.srr)) | splitTOfastq | flatten | statsFastq
+// Alternative:
+// add when to the processes and let statsFastq and qualtity_ctrl run simultaniously on same input
+//   when:
+//   params.with_fastqc
+//   workflow {
+//   prefetch(Channel.from(params.srr)) | splitTOfastq | flatten | (statsFastq & quality_ctrl)
+//   }
