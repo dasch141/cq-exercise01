@@ -5,18 +5,31 @@
       - 'Error'
       - 'SRR'
       
-- name: Run with SRR12022081
-  command: nextflow run ex04_workflow.nf --srr SRR12022081 -profile singularity
+- name: Run SRR12022081
+  command: nextflow run ex04_workflow.nf -profile singularity --srr SRR12022081
   files:
-    - path: "results/SRR12022081_1.fastq"
+    - path: "results_SRR12022081/fastq_files/SRR12022081_1.fastq"
       should_exist: true
       contains:
         - "@SRR"
-    - path: "results/SRR12022081_2.fastq"
+    - path: "results_SRR12022081/fastq_files/SRR12022081_2.fastq"
       should_exist: true
       contains:
         - "@SRR"
-    - path: "results/SRR12022081_1.txt"
+    - path: "results_SRR12022081/stats"
+      should_exist: false
+    - path: "results_SRR12022081/fastp"
+      should_exist: false
+    - path: "results_SRR12022081/fastqc"
+      should_exist: false
+  stdout:
+    must_not_contain_regex:
+      - 'Error'
+
+- name: Run SRR12022081 with stats
+  command: nextflow run ex04_workflow.nf -profile singularity --srr SRR12022081 --with_stats
+  files:
+    - path: "results_SRR12022081/stats/SRR12022081_1.txt"
       should_exist: true
       contains:
         - "count"
@@ -24,7 +37,7 @@
         - "max"
       must_not_contain:
         - "@SRR"
-    - path: "results/SRR12022081_2.txt"
+    - path: "results_SRR12022081/stats/SRR12022081_2.txt"
       should_exist: true
       contains:
         - "count"
@@ -32,15 +45,19 @@
         - "max"
       must_not_contain:
         - "@SRR"
+    - path: "results_SRR12022081/fastp"
+      should_exist: false
+    - path: "results_SRR12022081/fastqc"
+      should_exist: false
   stdout:
     must_not_contain_regex:
       - 'Error'
 
 
-- name: Run with SRR16641628
-  command: nextflow run ex04_workflow.nf --srr SRR16641628 -profile singularity
+- name: Run SRR16641628 with stats
+  command: nextflow run ex04_workflow.nf -profile singularity --srr SRR16641628 --with_stats
   files:
-    - path: "results/SRR16641628.txt"
+    - path: "results_SRR16641628/stats/SRR16641628.txt"
       should_exist: true
       contains:
         - "count"
@@ -48,10 +65,14 @@
         - "max"
       must_not_contain:
         - "@SRR"
-    - path: "results/SRR16641628.fastq"
+    - path: "results_SRR16641628/fastq_files/SRR16641628.fastq"
       should_exist: true
       contains:
         - "@SRR"
+    - path: "results_SRR12022081/fastp"
+      should_exist: false
+    - path: "results_SRR12022081/fastqc"
+      should_exist: false
   stdout:
     must_not_contain_regex:
       - 'Error'
