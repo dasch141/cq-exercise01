@@ -1,7 +1,7 @@
 nextflow.enable.dsl = 2
 
 params.storeDir = "${launchDir}/cache"
-params.out = "${launchDir}/results"
+params.out = "${launchDir}/results_${params.srr}"
 //params.srr = "SRR12022081"
 params.srr = null
 params.with_stats = false
@@ -79,12 +79,12 @@ process print_outs {
   publishDir params.out, mode: "copy", overwrite: true
   container "https://depot.galaxyproject.org/singularity/multiqc%3A1.9--py_1"
   input:
-    path infile
+    path trigger_file
   output:
-    path "xxx"
+    file "multiqc_{report,data}*"
   script:
   """
-
+  multiqc ${params.out}
   """
 }
 
@@ -111,6 +111,11 @@ workflow {
   if(params.with_fastp) {
     trimming(fastqfile_channel)
   }
+  }
+
+  if(params.with_fastqc || params.with_fastp) {
+  trigger_file = fastqfile_channel.first()  // Using a dummy file to trigger the process
+  print_outs(trigger_file)
   }
 }
 
