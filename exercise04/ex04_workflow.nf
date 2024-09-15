@@ -22,7 +22,7 @@ process prefetch {
 }
 
 process splitTOfastq {
-  publishDir params.out, mode :"copy", overwrite: true
+  publishDir "${params.out}/fastq_files", mode :"copy", overwrite: true
   container "https://depot.galaxyproject.org/singularity/sra-tools%3A2.11.0--pl5321ha49a11a_3"
   input:
     path infile
@@ -35,7 +35,7 @@ process splitTOfastq {
 }
 
 process statsFastq {
-    publishDir params.out, mode: "copy", overwrite: true
+    publishDir "${params.out}/stats", mode: "copy", overwrite: true
     container "https://depot.galaxyproject.org/singularity/ngsutils%3A0.5.9--py27h9801fc8_5"
     input:
         path infile
@@ -48,7 +48,7 @@ process statsFastq {
 }
 
 process quality_ctrl {
-  publishDir params.out, mode: "copy", overwrite: true
+  publishDir "${params.out}/fastqc", mode: "copy", overwrite: true
   container "https://depot.galaxyproject.org/singularity/fastqc%3A0.11.7--pl5.22.0_2"
   input:
     path infile
@@ -61,7 +61,7 @@ process quality_ctrl {
 }
 
 process trimming {
-  publishDir params.out, mode: "copy", overwrite: true
+  publishDir "${params.out}/fastp", mode: "copy", overwrite: true
   container "https://depot.galaxyproject.org/singularity/fastp%3A0.23.4--hadf994f_3"
   input:
     path infile
