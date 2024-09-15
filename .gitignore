@@ -3,6 +3,8 @@
 !.gitignore
 **/*.fasta
 **/work/
+**/output/
+**/cache/
 .nextflow.log*
 *:Zone.Identifier
 *:shield
