@@ -103,18 +103,18 @@ workflow {
     trim_channel = trimming(fastqfile_channel)
     con_channel = fastqfile_channel.concat(trim_channel).flatten()
     fastq_only_channel = con_channel.filter { file -> file.toString().endsWith('.fastq') }
-    quality_ctrl(fastq_only_channel.flatten())
+    trigger_channel = quality_ctrl(fastq_only_channel.flatten())
   } else {
   if(params.with_fastqc) {
-    quality_ctrl(fastqfile_channel)
+    trigger_channel = quality_ctrl(fastqfile_channel)
   }
   if(params.with_fastp) {
-    trimming(fastqfile_channel)
+    trigger_channel = trimming(fastqfile_channel)
   }
   }
 
   if(params.with_fastqc || params.with_fastp) {
-  trigger_file = fastqfile_channel.first()  // Using a dummy file to trigger the process
+  trigger_file = trigger_channel.first()  // Using a dummy file to trigger the process
   print_outs(trigger_file)
   }
 }
